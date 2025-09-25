@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calorie Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 350px;
+      text-align: center;
+    }
+    h2 { margin-bottom: 10px; color: #333; }
+    progress {
+      width: 100%;
+      height: 20px;
+      border-radius: 10px;
+    }
+    input {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid white;
+    }
+    button {
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      background: lightgreen;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: lightgreen; }
+    .log {
+      margin-top: 15px;
+      text-align: left;
+      font-size: 14px;
+      max-height: 150px;
+      overflow-y: auto;
+      border-top: 1px solid white;
+      padding-top: 10px;
+    }
+    .reset {
+      background: red;
+      margin-top: 5px;
+    }
+    .reset:hover { background: #c0392b; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Calorie Tracker</h2>
+    <p id="status">0 / 2000 kcal</p>
+    <progress id="progressBar" value="0" max="2000"></progress>
+
+    <input type="text" id="foodName" placeholder="Food name (e.g. Apple)">
+    <input type="number" id="calorieInput" placeholder="Calories (e.g. 95)">
+    <button id="addBtn">Add Food</button>
+    <button class="reset" id="resetBtn">Reset</button>
+
+    <div class="log" id="log"></div>
+  </div>
+
+  <script>
+    let totalCalories = 0;
+    const goal = 2000;
+
+    const statusEl = document.getElementById("status");
+    const progressBar = document.getElementById("progressBar");
+    const foodInput = document.getElementById("foodName");
+    const calorieInput = document.getElementById("calorieInput");
+    const logEl = document.getElementById("log");
+    const addBtn = document.getElementById("addBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function updateUI() {
+      statusEl.textContent = `${totalCalories} / ${goal} kcal`;
+      progressBar.value = totalCalories;
+    }
+
+    addBtn.addEventListener("click", () => {
+      const food = foodInput.value.trim();
+      const calories = parseInt(calorieInput.value);
+
+      if (!isNaN(calories) && calories > 0) {
+        totalCalories += calories;
+        const entry = document.createElement("p");
+        entry.textContent = `${food || "Food"} — ${calories} kcal`;
+        logEl.appendChild(entry);
+
+        updateUI();
+        foodInput.value = "";
+        calorieInput.value = "";
+      } else {
+        alert("Please enter valid calories!");
+      }
+    });
+
+    resetBtn.addEventListener("click", () => {
+      totalCalories = 0;
+      logEl.innerHTML = "";
+      updateUI();
+    });
+
+    // Initial UI
+    updateUI();
+  </script>
+</body>
+</html>
